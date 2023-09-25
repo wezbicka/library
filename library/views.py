@@ -46,7 +46,7 @@ class RegistrationView(View):
         form = Registration(request.POST)
 
         if form.is_valid():
-            surname = form.cleaned_data['surname']
+            surname = form.cleaned_data['username']
             name = form.cleaned_data['name']
             patronymic = form.cleaned_data['patronymic']
             password = make_password(form.cleaned_data['password'])
@@ -55,7 +55,7 @@ class RegistrationView(View):
                 name=name,
                 patronymic=patronymic,
             )
-            created_user, user = User.objects.get_or_create(
+            user = User.objects.create_user(
                 username=surname,
                 first_name=name,
                 password=password,
@@ -101,12 +101,15 @@ class ReturnBookView(View):
 
         if form.is_valid():
             code = form.cleaned_data['code']
-            book = Book.objects.filter(id=code).update(was_returned=True)
-            borrowing_record = Borrowing.objects.filter(
-                book=book
-                ).update(
-                    return_date=timezone.localtime(),
-                )
+            book = Book.objects.get(id=code)
+            book.was_returned=True
+            book.save()
+            borrowing_record = Borrowing.objects.get(
+                book__id=code,
+                reader__surname=request.user.username,
+            )
+            borrowing_record.return_date=timezone.localtime()
+            borrowing_record.save()
             return redirect("reader_account")
  
         return render(request, "return_book.html", context={
@@ -131,11 +134,13 @@ class TakeBookView(View):
                 name=request.user.first_name
             )
             code = form.cleaned_data['code']
-            book = Book.objects.get(id=code).update(was_returned=False)
+            book = Book.objects.get(id=code)
+            book.was_returned=False
+            book.save()
             borrowing_record = Borrowing.objects.create(
                 book=book,
+                borrow_date=timezone.localtime(),
                 reader=reader,
-                borrow_date=timezone.localtime()
             )
             borrowing_record.save()
             return redirect("reader_account")

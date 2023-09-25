@@ -23,7 +23,7 @@ class Login(forms.Form):
 
 
 class Registration(forms.Form):
-    surname = forms.CharField(
+    username = forms.CharField(
         label='Фамилия', max_length=75, required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
