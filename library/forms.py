@@ -51,3 +51,13 @@ class Registration(forms.Form):
             'placeholder': 'Введите пароль'
         })
     )
+
+
+class ActionBook(forms.Form):
+    code = forms.IntegerField(
+        label="Код книги",
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите код книги'
+        })
+    )

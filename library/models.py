@@ -17,6 +17,7 @@ class Reader(models.Model):
 class Book(models.Model):
     title = models.CharField("Название", max_length=200)
     author = models.CharField("Автор", max_length=200)
+    was_returned = models.BooleanField("Возвращена", default=True)
 
     def __str__(self):
         return f'{self.id} {self.author} "{self.title}"'
@@ -39,7 +40,6 @@ class Borrowing(models.Model):
     )
     borrow_date = models.DateTimeField("Дата выдачи")
     return_date = models.DateTimeField("Дата возврата", null=True, blank=True)
-    was_returned = models.BooleanField("Возвращена", default=False)
 
     def __str__(self):
         return '{reader} брал книгу {book} c {borrow_date} {returned}'.format(

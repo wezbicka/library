@@ -24,4 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.LoginView.as_view(), name="login"),
     path('signup/', views.RegistrationView.as_view(), name="signup"),
+    path('reader_account/', views.BookView.as_view(), name="reader_account"),
+    path('return_book/', views.ReturnBookView.as_view(), name="return_book"),
+    path('books/', views.free_book, name="free_books"),
 ]
