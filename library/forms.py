@@ -14,7 +14,38 @@ class Login(forms.Form):
         })
     )
     password = forms.CharField(
-        label='Пароль', max_length=75, required=False,
+        label='Пароль', max_length=75, required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите пароль'
+        })
+    )
+
+
+class Registration(forms.Form):
+    surname = forms.CharField(
+        label='Фамилия', max_length=75, required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите фамилию пользователя'
+        })
+    )
+    name = forms.CharField(
+        label='Имя', max_length=75, required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите имя пользователя'
+        })
+    )
+    patronymic = forms.CharField(
+        label='Отчество', max_length=75, required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите отчество'
+        })
+    )
+    password = forms.CharField(
+        label='Пароль', max_length=75, required=True,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Введите пароль'
