@@ -22,5 +22,7 @@ pip install -r requirements.txt
 ```
 python manage.py runserver
 ```
-#### Приложение будет доступно по адресу:
+#### Приложение будет доступно по адресу: http://127.0.0.1:8000/
 
+
+#### Зайти в админку http://127.0.0.1:8000/admin/  (login: test, password: test)
