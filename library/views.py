@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-import datetime
+from django.utils import timezone
 
 from django.contrib.auth import authenticate, login
 
@@ -101,13 +101,43 @@ class ReturnBookView(View):
 
         if form.is_valid():
             code = form.cleaned_data['code']
-            book = Book.objects.get(id=code)
+            book = Book.objects.filter(id=code).update(was_returned=True)
             borrowing_record = Borrowing.objects.filter(
                 book=book
                 ).update(
-                    return_date=datetime.datetime.now(),
-                    book__was_returned=True
+                    return_date=timezone.localtime(),
                 )
+            return redirect("reader_account")
+ 
+        return render(request, "return_book.html", context={
+            'form': form,
+            'ivalid': True,
+        })
+
+
+class TakeBookView(View):
+    def get(self, request, *args, **kwargs):
+        form = ActionBook()
+        return render(request, "take_book.html", context={
+            'form': form
+        })
+    
+    def post(self, request):
+        form = ActionBook(request.POST)
+
+        if form.is_valid():
+            reader = Reader.objects.get(
+                surname=request.user,
+                name=request.user.first_name
+            )
+            code = form.cleaned_data['code']
+            book = Book.objects.get(id=code).update(was_returned=False)
+            borrowing_record = Borrowing.objects.create(
+                book=book,
+                reader=reader,
+                borrow_date=timezone.localtime()
+            )
+            borrowing_record.save()
             return redirect("reader_account")
  
         return render(request, "return_book.html", context={

@@ -27,6 +27,7 @@
   <body>
     <div class="container">
         <hr>
+        <h2>Список доступных книг</h2>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -44,7 +45,11 @@
                                 <td class="table-element"><strong>{{ book.title }}</strong></td>
                             <td class="table-element">{{ book.author }}</td>
                             <td class="table-element">{{ book.id }}</td>
-                            
+                            <td class="table-element">
+                                <a href="{% url 'take_book' %}">
+                                    <input type="button" name="take_book" value="Взять книгу">
+                                </a>
+                            </td>
                             
         
                         </tr>
